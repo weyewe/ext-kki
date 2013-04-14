@@ -1,0 +1,38 @@
+rails g model Member; 
+rails g model GroupLoanProduct; 
+rails g model GroupLoanMembership; 
+rails g model SubGroupLoan; 
+rails g model GroupLoan; 
+rails g model GroupDefaultPayment; 
+rails g model GroupWeeklyPayment; 
+rails g model GroupLoanDisbursement; 
+rails g model GroupIndependentPayment; 
+rails g model GroupGracePayment; 
+rails g model WeeklyTask; 
+rails g model WeeklyAttendance;
+
+
+GroupLoan belongs to GroupLoanProduct
+GroupLoan has_many Member through GroupLoanMembership
+GroupLoanMembership has_one DefaultPayment 
+
+GroupLoan has_many WeeklyTask (number of weeks to pay)
+WeeklyTask has_many GroupWeeklyPayment
+WeeklyTask has_many WeeklyAttendance 
+
+
+The backbone: TransactionActivity (can't be touched directly)
+	it has several flags: 
+	source_document     => GroupGracePayment? GroupIndependentPayment? 
+	source_document_id  => the id of such object 
+=========> Core data done. 
+
+For data mining, we need to tweak it. But,  then again.. we need this basic functionality to be working 
+
+And in this mode, we can do update data in better manner. 
+
+Things we need to think upfront: update and delete. What if the GroupWeeklyPayment is wrong => we need to update the data. (wrong member selected). 
+Data that will be changed: Total Compulsory Savings, total Voluntary Savings 
+
+# boils down to update transaction_activity 
+
